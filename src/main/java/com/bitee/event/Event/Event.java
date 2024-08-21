@@ -65,6 +65,14 @@ public class Event implements Serializable {
     private Date endDate;
 
 
-   @OneToMany( mappedBy = "category", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+   @OneToMany( cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<Tag> tags;
+
+    @ManyToMany
+    @JoinTable(
+            name = "event_attendees",
+            joinColumns = @JoinColumn(name = "event_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<User> attendees;
 }

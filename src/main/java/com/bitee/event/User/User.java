@@ -1,11 +1,13 @@
 package com.bitee.event.User;
 
+import com.bitee.event.Event.Event;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @Entity
@@ -33,7 +35,10 @@ public class User implements Serializable {
     @Column(name="status")
     private AccountStatus status;
     @Column(name="role")
-    private String role;
+    private UserRole role;
     @Column(name="phone_number")
     private String phoneNumber;
+
+    @ManyToMany(mappedBy = "attendees")
+    private List<Event> eventsAttended;
 }
