@@ -1,5 +1,7 @@
 package com.bitee.event.User;
 
+import com.bitee.event.Email.EmailDetails;
+import com.bitee.event.Email.EmailService;
 import com.bitee.event.Otp.Otp;
 import com.bitee.event.Otp.OtpRepository;
 import com.bitee.event.dao.ApiResponse;
@@ -20,6 +22,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     OtpRepository otpRepository;
 
+    @Autowired
+    EmailService emailService;
+
     /**
      * create a user
      * check if a user has an account
@@ -30,6 +35,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<ApiResponse<User>> signup(UserRequest userRequest) {
 
+//        TODO
+//          @validate password to be alphanumberic
+        //  @validate phone number
         if (userRepository.existsByEmail(userRequest.getEmail())){
             ApiResponse<User> accountExists = ApiResponse.error("409","User with provided email already exists",
                     null);
@@ -45,6 +53,13 @@ public class UserServiceImpl implements UserService {
         otp.setToken(EventUtils.generateRandomToken());
         otpRepository.save(otp);
         //send Otp to user
+
+        EmailDetails signUpUserEmail = new EmailDetails();
+        signUpUserEmail.setRecipient(newUser.getEmail());
+        signUpUserEmail.setSubject("OTP Token for Event Wave Registration");
+        signUpUserEmail.setMessageBody(EventUtils.EmailOtpBody(userRequest.getFirstName(),otp.getToken()));
+        emailService.sendEmailAlert(signUpUserEmail);
+
 
         ApiResponse<User> otpSent = ApiResponse.success("201","OTp sent to email for verification",null);
         return new ResponseEntity<>(otpSent,HttpStatus.CREATED);

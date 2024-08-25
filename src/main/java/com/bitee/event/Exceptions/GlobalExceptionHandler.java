@@ -28,8 +28,15 @@ public class GlobalExceptionHandler  {
             errors.add(errorMessage);
         });
         System.out.println("Caught an exception error: "+errors);
-body.put("errors",errors);
-ApiResponse response = ApiResponse.error("400","Invalid fields",errors);
+        body.put("errors",errors);
+        ApiResponse response = ApiResponse.error("400","Invalid fields",errors);
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+
+    @ExceptionHandler(Exception.class)
+    protected ResponseEntity<ApiResponse<Object>> handleAllExceptions(Exception ex) {
+        ApiResponse<Object> response = ApiResponse.error("500", "An unexpected error occurred", null);
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
