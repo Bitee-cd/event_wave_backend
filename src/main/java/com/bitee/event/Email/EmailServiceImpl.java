@@ -25,14 +25,15 @@ public class EmailServiceImpl implements EmailService{
             helper.setFrom(senderEmail);
             helper.setTo(emailDetails.getRecipient());
             helper.setSubject(emailDetails.getSubject());
-            message.setContent(emailDetails.getMessageBody(),"text/html");
+            helper.setText(emailDetails.getMessageBody(), true);
+//            message.setContent(emailDetails.getMessageBody(),"text/html");
             mailMessage.setText(emailDetails.getMessageBody());
             javaMailSender.send(message);
             System.out.println("Mail message sent successfully");
 
         }catch(Exception e){
-            System.out.println(e);
-            throw new RuntimeException();
+            System.out.println("Failed to send email: " + e.getMessage());
+            throw new RuntimeException("Failed to send email", e);
         }
 
     }

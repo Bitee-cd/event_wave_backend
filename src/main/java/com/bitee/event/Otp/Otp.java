@@ -9,6 +9,10 @@ import org.hibernate.annotations.DynamicUpdate;
 import java.io.Serializable;
 import java.util.Date;
 
+@NamedQuery(name = "Otp.findByUserEmail",query="SELECT o from Otp o WHERE o.user.email = :email")
+@NamedQuery(name="findByToken",query="SELECT o from Otp o WHERE o.token = :otp ")
+
+
 @Data
 @Entity
 @Table(name="otp")
@@ -30,7 +34,7 @@ public class Otp implements Serializable {
     @Column(name="expires_at")
     private Date expiresAt;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user",nullable = false)
     private User user;
 

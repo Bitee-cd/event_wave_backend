@@ -22,6 +22,7 @@ public class GlobalExceptionHandler  {
     protected ResponseEntity<ApiResponse<List<String>>> handleValidationExceptions(MethodArgumentNotValidException ex){
         Map<String, List<String>> body = new HashMap<>();
         List<String> errors = new ArrayList<>();
+        System.out.println("inside validation exception 500");
         ex.getBindingResult().getAllErrors().forEach((error)-> {
 //            String fieldName = ((FieldError) error).getField();
             String errorMessage = error.getDefaultMessage();

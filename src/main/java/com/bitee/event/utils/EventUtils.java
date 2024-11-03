@@ -87,4 +87,8 @@ public class EventUtils {
                 "</body>\n" +
                 "</html>";
     }
+
+    public static String API_VERSION_1(){
+        return "api/v1";
+    }
 }
