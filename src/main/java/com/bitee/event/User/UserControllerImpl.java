@@ -15,11 +15,6 @@ public class UserControllerImpl implements UserController{
     @Autowired
     UserService userService;
 
-    @Override
-    public ResponseEntity<ApiResponse<String>> helloWorld() {
-        ApiResponse response = ApiResponse.success("200","success","HEllo world");
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
 
     @Override
     public ResponseEntity<ApiResponse<User>> signup(UserRequest userRequest) {

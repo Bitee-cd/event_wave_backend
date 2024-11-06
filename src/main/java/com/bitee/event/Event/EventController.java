@@ -1,11 +1,13 @@
 package com.bitee.event.Event;
 
 import com.bitee.event.dao.ApiResponse;
-import com.bitee.event.dao.TagDto;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @RequestMapping("api/v1/event")
 public interface EventController {
@@ -18,8 +20,11 @@ public interface EventController {
     @GetMapping("")
     ResponseEntity<ApiResponse<ArrayList<Event>>> getAllEvents();
 
-    @GetMapping("")
-    ResponseEntity<ApiResponse<Event>> getSingleEvent(@RequestParam String eventId);
+    @GetMapping("/{eventId}")
+    ResponseEntity<ApiResponse<Event>> getSingleEvent(@Valid @PathVariable Long eventId);
+
+    @GetMapping("types")
+    ResponseEntity<ApiResponse<List<Map<String,String>>>> getEventTypes();
 
 
 }

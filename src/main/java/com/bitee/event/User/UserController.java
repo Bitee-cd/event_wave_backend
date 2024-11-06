@@ -12,22 +12,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-@RequestMapping(path = "api/v1")
+@RequestMapping(path = "api/v1/auth")
 public interface UserController {
 
-    @GetMapping(path="hello")
-    ResponseEntity<ApiResponse<String>> helloWorld();
 
-    @PostMapping(path="auth/signup")
+    @PostMapping(path="signup")
     ResponseEntity<ApiResponse<User>> signup(@Valid @RequestBody UserRequest userRequest);
 
-    @PostMapping(path="auth/login")
+    @PostMapping(path="login")
     ResponseEntity<ApiResponse<Map<String, String>>> login(@Valid @RequestBody LoginRequest loginRequest);
 
-    @PostMapping(path="auth/password/forgot")
+    @PostMapping(path="password/forgot")
     ResponseEntity<ApiResponse<String>> forgotPassword(@Valid @RequestBody RegenerateOtp otpRequest);
 
-    @PostMapping(path="auth/password/change")
+    @PostMapping(path="password/change")
     ResponseEntity<ApiResponse<String>> changePassword(@Valid @RequestBody ChangePasswordRequest changePasswordRequest);
 
     @GetMapping(path= "options")

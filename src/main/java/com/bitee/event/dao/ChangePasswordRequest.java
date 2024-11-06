@@ -27,5 +27,5 @@ public class ChangePasswordRequest {
             regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{6,}$",
             message = "Password must contain at least one letter, one number, and one special character"
     )
-    private String Password;
+    private String password;
 }

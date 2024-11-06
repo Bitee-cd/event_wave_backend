@@ -11,6 +11,7 @@ import com.bitee.event.utils.EventUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -69,7 +70,11 @@ public class OtpServiceImpl implements OtpService {
     @Override
     public ResponseEntity<ApiResponse<String>> regenerateOtp(String email) {
         User user = userRepository.findByUserEmail(email);
-        if( user==null || !user.getStatus().equals(AccountStatus.INACTIVE)){
+        if (user== null){
+            return new ResponseEntity<>(ApiResponse.success("200","Otp sent successfully to email",null),HttpStatus.OK);
+        }
+
+        if( !user.getStatus().equals(AccountStatus.INACTIVE)){
             return new ResponseEntity<>(ApiResponse.error("400", "User has been activated", null), HttpStatus.BAD_REQUEST);
         }
         invalidateExistingOtp(user);
@@ -80,6 +85,7 @@ public class OtpServiceImpl implements OtpService {
 
 
     }
+
 
     private void invalidateExistingOtp(User user){
         Otp existingOtp = otpRepository.findByUserEmail(user.getEmail());

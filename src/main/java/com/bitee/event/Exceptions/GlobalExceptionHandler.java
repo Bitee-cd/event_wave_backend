@@ -28,7 +28,6 @@ public class GlobalExceptionHandler  {
             String errorMessage = error.getDefaultMessage();
             errors.add(errorMessage);
         });
-        System.out.println("Caught an exception error: "+errors);
         body.put("errors",errors);
         ApiResponse response = ApiResponse.error("400","Invalid fields",errors);
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);

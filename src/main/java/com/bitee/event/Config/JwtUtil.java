@@ -17,6 +17,7 @@ import java.util.function.Function;
 
 @Service
 public class JwtUtil {
+    private final Integer EXPIRATION_TIME = 1000*60*60*60;
 
     @Value("${jwt.secret}")
     private String secret;
@@ -44,7 +45,7 @@ public class JwtUtil {
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()+ 1000*60*60*10))
+                .setExpiration(new Date(System.currentTimeMillis()+ EXPIRATION_TIME))
                 .signWith(key()).compact();
     }
 

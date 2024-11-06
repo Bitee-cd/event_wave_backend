@@ -1,13 +1,12 @@
 package com.bitee.event.Event;
 
-import com.bitee.event.Tag.Tag;
 import com.bitee.event.dao.ApiResponse;
-import com.bitee.event.dao.TagDto;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class EventServiceImpl implements EventService{
@@ -29,8 +28,20 @@ public class EventServiceImpl implements EventService{
     }
 
     @Override
-    public ResponseEntity<ApiResponse<Event>> getSingleEvent(String eventId) {
+    public ResponseEntity<ApiResponse<Event>> getSingleEvent(Long eventId) {
         return null;
+    }
+
+    @Override
+    public ResponseEntity<ApiResponse<List<Map<String,String>>>> getEventTypes() {
+
+       List<Map<String,String>> eventTypes = Arrays.stream(EventType.values()).map(eventType -> {
+            Map<String,String> option = new HashMap<>();
+            option.put("label", eventType.name().charAt(0) + eventType.name().substring(1).toLowerCase());
+            option.put("value",eventType.toString());
+            return option;
+        }).toList();
+        return new ResponseEntity<>(ApiResponse.success("200","Event types retrieved successfully",eventTypes), HttpStatus.OK);
     }
 
 }

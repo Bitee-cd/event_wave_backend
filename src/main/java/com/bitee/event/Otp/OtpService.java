@@ -11,4 +11,6 @@ public interface OtpService {
 
     ResponseEntity<ApiResponse<String>> regenerateOtp(String email);
     ResponseEntity<ApiResponse<String>> generateOtp(String email);
+
+
 }
