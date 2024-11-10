@@ -1,7 +1,10 @@
 package com.bitee.event.User;
 
-import com.bitee.event.UserPrivilegeAssignment.UserPrivilegeAssignment;
 import com.bitee.event.Event.Event;
+import com.bitee.event.UserPrivilegeAssignment.UserPrivilegeAssignment;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.DynamicInsert;
@@ -17,6 +20,7 @@ import java.util.List;
 @DynamicInsert
 @DynamicUpdate
 @Table(name = "user")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class User implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -46,6 +50,7 @@ public class User implements Serializable {
     private List<Event> eventsAttended;
 
     @OneToMany(mappedBy = "user")
+    @JsonManagedReference
     private List<UserPrivilegeAssignment> privileges;
 
 }

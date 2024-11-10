@@ -43,7 +43,7 @@ public class UserPrivilegeAssignmentServiceImpl implements UserPrivilegeAssignme
         }
 
         // Check if the privilege exists
-        Optional<Privilege> optionalPrivilege = privilegeRepository.findById(createUserPrivilegeAssignmentDto.getPrivilege());
+        Optional<Privilege> optionalPrivilege = privilegeRepository.findById(createUserPrivilegeAssignmentDto.getPrivilegeid());
         if (optionalPrivilege.isEmpty()) {
             return new ResponseEntity<>(ApiResponse.error("400", "Privilege not found", null), HttpStatus.BAD_REQUEST);
         }
@@ -51,6 +51,8 @@ public class UserPrivilegeAssignmentServiceImpl implements UserPrivilegeAssignme
         // Create and save new user privilege assignment
         UserPrivilegeAssignment assignment = new UserPrivilegeAssignment();
         assignment.setUser(optionalUser.get());
+        assignment.setUserid(createUserPrivilegeAssignmentDto.getUserid());
+        assignment.setPrivilegeid(createUserPrivilegeAssignmentDto.getPrivilegeid());
         assignment.setPrivilege(optionalPrivilege.get());
 
         UserPrivilegeAssignment savedAssignment = userPrivilegeAssignmentRepository.save(assignment);
@@ -83,7 +85,7 @@ public class UserPrivilegeAssignmentServiceImpl implements UserPrivilegeAssignme
         }
 
         // Check if the privilege exists
-        Optional<Privilege> optionalPrivilege = privilegeRepository.findById(editUserPrivilegeAssignmentDto.getPrivilege());
+        Optional<Privilege> optionalPrivilege = privilegeRepository.findById(editUserPrivilegeAssignmentDto.getPrivilegeid());
         if (optionalPrivilege.isEmpty()) {
             return new ResponseEntity<>(ApiResponse.error("400", "Privilege not found", null), HttpStatus.BAD_REQUEST);
         }
@@ -91,7 +93,9 @@ public class UserPrivilegeAssignmentServiceImpl implements UserPrivilegeAssignme
         // Update the assignment
         UserPrivilegeAssignment assignment = existingAssignment.get();
         assignment.setUser(optionalUser.get());
+        assignment.setUserid(editUserPrivilegeAssignmentDto.getUserid());
         assignment.setPrivilege(optionalPrivilege.get());
+        assignment.setPrivilegeid(editUserPrivilegeAssignmentDto.getPrivilegeid());
 
         UserPrivilegeAssignment updatedAssignment = userPrivilegeAssignmentRepository.save(assignment);
 
@@ -111,21 +115,30 @@ public class UserPrivilegeAssignmentServiceImpl implements UserPrivilegeAssignme
         return new ResponseEntity<>(ApiResponse.success("200", "User privilege assignment deleted successfully", null), HttpStatus.OK);
     }
 
-    public void deleteUserPrivilege(Long id) {
-        userPrivilegeAssignmentRepository.deleteByUserId(id);
-    }
+
 
     @Transactional
-    public ResponseEntity<ApiResponse<String>> createPrivileges(Long userid, List<Privilege> privileges) {
-        // Fetch the user by ID
+    public ResponseEntity<ApiResponse<String>> createUserPrivileges(Long userId, List<Long> privilegeIds) {
         try {
-            Optional<User> optionalUser = userRepository.findById(userid);
-
+            // Fetch the user by ID
+            Optional<User> optionalUser = userRepository.findById(userId);
             if (optionalUser.isEmpty()) {
-                throw new RuntimeException("User not found with id: " + userid);
+                return new ResponseEntity<>(ApiResponse.error("400", "User not found", null), HttpStatus.BAD_REQUEST);
+
             }
-            userPrivilegeAssignmentRepository.deleteByUserId(userid);
+
+            // Delete existing privileges assigned to the user
+            userPrivilegeAssignmentRepository.deleteByUserId(userId);
             User user = optionalUser.get();
+
+            // Fetch privileges by IDs and cross-check
+            List<Privilege> privileges = privilegeRepository.findAllById(privilegeIds);
+            if (privileges.size() != privilegeIds.size()) {
+                return new ResponseEntity<>(ApiResponse.error("400", "Privileges  not found", null), HttpStatus.BAD_REQUEST);
+
+            }
+
+            // Map privileges to UserPrivilegeAssignment entities
             List<UserPrivilegeAssignment> userPrivilegeAssignments = privileges.stream()
                     .map(privilege -> {
                         UserPrivilegeAssignment assignment = new UserPrivilegeAssignment();
@@ -137,23 +150,29 @@ public class UserPrivilegeAssignmentServiceImpl implements UserPrivilegeAssignme
                     })
                     .toList();
 
-            userPrivilegeAssignmentRepository.saveAll(userPrivilegeAssignments).stream()
-                    .map(UserPrivilegeAssignment::getPrivilege).toList();
+            // Save all assignments
+            userPrivilegeAssignmentRepository.saveAll(userPrivilegeAssignments);
+
             return new ResponseEntity<>(ApiResponse.success("201", "Created", null), HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(ApiResponse.error("500", "Something went wrong", null), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
+
     @Override
     public ResponseEntity<ApiResponse<List<Privilege>>> getUserPrivileges(Long userId) {
         Optional<User> optionalUser = userRepository.findById(userId);
 
         if (optionalUser.isEmpty()) {
-            throw new RuntimeException("User not found with id: " + userId);
+            return new ResponseEntity<>(ApiResponse.error("400", "User not found", null), HttpStatus.BAD_REQUEST);
+
         }
         User user = optionalUser.get();
         List<UserPrivilegeAssignment> assignments = userPrivilegeAssignmentRepository.findByUserId(userId);
+
+        System.out.println("assignments for user:"+ "userId"+" "+ ": "+assignments);
+
 
         List<Privilege> privileges = assignments.stream().map(UserPrivilegeAssignment::getPrivilege).toList();
 
@@ -176,7 +195,8 @@ public class UserPrivilegeAssignmentServiceImpl implements UserPrivilegeAssignme
             Optional<User> optionalUser = userRepository.findById(userId);
 
             if (optionalUser.isEmpty()) {
-                throw new RuntimeException("User not found with id: " + userId);
+                return new ResponseEntity<>(ApiResponse.error("400", "User not found", null), HttpStatus.BAD_REQUEST);
+
             }
             userPrivilegeAssignmentRepository.deleteByUserId(userId);
             return new ResponseEntity<>(ApiResponse.success("200", "User Privileges successfully cleared", null), HttpStatus.OK);

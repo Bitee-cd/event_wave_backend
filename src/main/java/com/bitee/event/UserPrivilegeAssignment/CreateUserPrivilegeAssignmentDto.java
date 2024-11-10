@@ -1,6 +1,5 @@
 package com.bitee.event.UserPrivilegeAssignment;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,6 +15,6 @@ public class CreateUserPrivilegeAssignmentDto {
     private Long userid;
 
     @NotNull(message = "Privilege ID is required")
-    private Long privilege;
+    private Long privilegeid;
 
 }

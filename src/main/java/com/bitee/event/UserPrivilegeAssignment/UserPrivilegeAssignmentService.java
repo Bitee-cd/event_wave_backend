@@ -19,7 +19,7 @@ public interface UserPrivilegeAssignmentService {
 
     ResponseEntity<ApiResponse<String>> deletePrivilege(Long id);
 
-    ResponseEntity<ApiResponse<String>> createPrivileges(Long userId, List<Privilege> privileges);
+    ResponseEntity<ApiResponse<String>> createUserPrivileges(Long userId, List<Long> privilegeIds);
 
     ResponseEntity<ApiResponse<List<Privilege>>> getUserPrivileges(Long userId);
 

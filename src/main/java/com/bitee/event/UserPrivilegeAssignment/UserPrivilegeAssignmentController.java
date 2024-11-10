@@ -15,7 +15,7 @@ import java.util.List;
 public interface UserPrivilegeAssignmentController {
     @GetMapping("user-privilege-assignment")
     ResponseEntity<ApiResponse<List<UserPrivilegeAssignment>>> getAllUserPrivilegeAssignment();
-    @PutMapping("user-privilege-assignment")
+    @PostMapping("user-privilege-assignment")
     ResponseEntity<ApiResponse<UserPrivilegeAssignment>> createPrivilege(@Valid @RequestBody CreateUserPrivilegeAssignmentDto createUserPrivilegeAssignmentDto);
 
     @GetMapping("user-privilege-assignment/{id}")
@@ -28,7 +28,7 @@ public interface UserPrivilegeAssignmentController {
     ResponseEntity<ApiResponse<String>> deletePrivilege(@PathVariable("id") Long id);
 
     @PostMapping("user/{userId}/privileges")
-    ResponseEntity<ApiResponse<String>> createPrivileges(@PathVariable("userId") Long userId,@RequestBody  List<Privilege> privileges);
+    ResponseEntity<ApiResponse<String>> createUserPrivileges(@PathVariable("userId") Long userId,@RequestBody  List<Long> privilegeIds);
 
     @GetMapping("user/{userId}/privileges")
     ResponseEntity<ApiResponse<List<Privilege>>> getUserPrivileges(@PathVariable("userId") Long userId);

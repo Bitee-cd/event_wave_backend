@@ -2,7 +2,6 @@ package com.bitee.event.Privilege;
 
 import com.bitee.event.Role.Role;
 import com.bitee.event.Role.RoleRepository;
-import com.bitee.event.User.User;
 import com.bitee.event.User.UserRepository;
 import com.bitee.event.utils.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,19 +34,17 @@ public class PrivilegeServiceImpl implements PrivilegeService{
     @Override
     public ResponseEntity<ApiResponse<Privilege>> createPrivilege(CreatePrivilegeRequestDto createPrivilegeRequestDto) {
         // Check if the user and role exist
-        Optional<User> optionalUser = userRepository.findById(createPrivilegeRequestDto.getUserid());
         Optional<Role> optionalRole = roleRepository.findById(createPrivilegeRequestDto.getRoleid());
 
-        if (optionalUser.isEmpty() || optionalRole.isEmpty()) {
-            return new ResponseEntity<>(ApiResponse.error("400", "User or Role not found", null), HttpStatus.BAD_REQUEST);
+        if ( optionalRole.isEmpty()) {
+            return new ResponseEntity<>(ApiResponse.error("400", " Role not found", null), HttpStatus.BAD_REQUEST);
         }
 
         // Create new Privilege object
         Privilege privilege = new Privilege();
         privilege.setDescription(createPrivilegeRequestDto.getDescription());
-        privilege.setUserid(createPrivilegeRequestDto.getUserid());
         privilege.setRoleid(createPrivilegeRequestDto.getRoleid());
-        privilege.setUser(optionalUser.get());
+        privilege.setData(createPrivilegeRequestDto.getData());
         privilege.setRole(optionalRole.get());
 
         // Save the privilege
@@ -73,19 +70,17 @@ public class PrivilegeServiceImpl implements PrivilegeService{
         }
 
         // Check if the user and role exist
-        Optional<User> optionalUser = userRepository.findById(editPrivilegeDto.getUserid());
         Optional<Role> optionalRole = roleRepository.findById(editPrivilegeDto.getRoleid());
 
-        if (optionalUser.isEmpty() || optionalRole.isEmpty()) {
-            return new ResponseEntity<>(ApiResponse.error("400", "User or Role not found", null), HttpStatus.BAD_REQUEST);
+        if ( optionalRole.isEmpty()) {
+            return new ResponseEntity<>(ApiResponse.error("400", "Role not found", null), HttpStatus.BAD_REQUEST);
         }
 
         // Update the privilege
         Privilege privilege = optionalPrivilege.get();
         privilege.setDescription(editPrivilegeDto.getDescription());
-        privilege.setUserid(editPrivilegeDto.getUserid());
         privilege.setRoleid(editPrivilegeDto.getRoleid());
-        privilege.setUser(optionalUser.get());
+        privilege.setData(editPrivilegeDto.getData());
         privilege.setRole(optionalRole.get());
 
         // Save the updated privilege

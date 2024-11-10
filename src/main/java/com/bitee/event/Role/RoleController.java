@@ -7,11 +7,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequestMapping("role")
+@RequestMapping("roles")
 public interface RoleController {
     @GetMapping("")
     ResponseEntity<ApiResponse<List<Role>>> getAllRoles();
-    @PutMapping("")
+    @PostMapping("")
     ResponseEntity<ApiResponse<Role>> createPrivilege( @RequestBody CreateRoleRequestDto role);
 
     @GetMapping("{roleId}")

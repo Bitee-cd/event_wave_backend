@@ -42,8 +42,8 @@ public class UserPrivilegeAssignmentControllerImpl implements UserPrivilegeAssig
     }
 
     @Override
-    public ResponseEntity<ApiResponse<String>> createPrivileges(Long userid, List<Privilege> privileges) {
-        return userPrivilegeAssignmentService.createPrivileges(userid,privileges);
+    public ResponseEntity<ApiResponse<String>> createUserPrivileges(Long userid, List<Long> privilegeIds) {
+        return userPrivilegeAssignmentService.createUserPrivileges(userid,privilegeIds);
     }
 
     @Override

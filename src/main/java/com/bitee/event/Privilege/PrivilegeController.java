@@ -7,11 +7,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequestMapping(name="privilege")
+@RequestMapping("privileges")
 public interface PrivilegeController {
     @GetMapping("")
     ResponseEntity<ApiResponse<List<Privilege>>> getAllPrivileges();
-    @PutMapping("")
+    @PostMapping("")
     ResponseEntity<ApiResponse<Privilege>> createPrivilege(@Valid @RequestBody CreatePrivilegeRequestDto createPrivilegeRequestDto);
 
     @GetMapping("{privilegeId}")

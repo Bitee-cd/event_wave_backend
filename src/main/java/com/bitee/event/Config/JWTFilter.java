@@ -1,6 +1,7 @@
 package com.bitee.event.Config;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,30 +29,51 @@ public class JWTFilter extends OncePerRequestFilter {
 
     private String username = null;
 
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-            if(request.getServletPath().matches("/auth/login|/auth/signup|/otp/verify|/otp/regenerate")){
-                filterChain.doFilter(request,response);
-            }else{
-                String authorizationHeader = request.getHeader("Authorization");
-                String token = null;
-                if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")){
-                    token = authorizationHeader.substring(7);
+        if (request.getServletPath().matches("/auth/login|/auth/signup|/otp/verify|/otp/regenerate")) {
+            filterChain.doFilter(request, response);
+        } else {
+            String authorizationHeader = request.getHeader("Authorization");
+            String token = null;
+            String username = null;
+
+            if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+                token = authorizationHeader.substring(7);
+
+                try {
+
                     username = jwtUtil.extractUsername(token);
                     claims = jwtUtil.extractAllClaims(token);
+                } catch (ExpiredJwtException e) {
+
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token has expired. Please log in again.");
+                    return;
+                } catch (Exception e) {
+
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token. Please log in again.");
+                    return;
                 }
-                if(username != null && SecurityContextHolder.getContext().getAuthentication() == null){
-                    UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
-                    if(jwtUtil.validateToken(token,userDetails)){
-                        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails,null, userDetails.getAuthorities());
-                        usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-                    }
-                }
-                filterChain.doFilter(request,response);
             }
 
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
+
+                if (jwtUtil.validateToken(token, userDetails)) {
+                    UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+                            userDetails, null, userDetails.getAuthorities());
+                    usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+                    // Set the authentication in the security context
+                    SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                }
+            }
+            // Proceed with the filter chain
+            filterChain.doFilter(request, response);
+        }
     }
+
 
     public boolean isAdmin() {return "admin".equalsIgnoreCase((String) claims.get("role"));}
 
