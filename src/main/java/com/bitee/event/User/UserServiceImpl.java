@@ -2,21 +2,18 @@ package com.bitee.event.User;
 
 import com.bitee.event.Config.CustomUserDetailsService;
 import com.bitee.event.Config.JwtUtil;
-import com.bitee.event.Email.EmailDetails;
-import com.bitee.event.Email.EmailService;
 import com.bitee.event.Event.EventType;
 import com.bitee.event.Otp.Otp;
 import com.bitee.event.Otp.OtpRepository;
 import com.bitee.event.Otp.OtpService;
-import com.bitee.event.dao.*;
-import com.bitee.event.utils.EventUtils;
+import com.bitee.event.Otp.RegenerateOtpRequestDto;
+import com.bitee.event.utils.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -50,19 +47,19 @@ public class UserServiceImpl implements UserService {
      * check if a user has an account
      * sends otp to user email for activation
      *
-     * @param userRequest
+     * @param userRequestDto
      * @return api response
      */
     @Override
-    public ResponseEntity<ApiResponse<User>> signup(UserRequest userRequest) {
+    public ResponseEntity<ApiResponse<User>> signup(UserRequestDto userRequestDto) {
 
         //  @validate phone number
-        if (userRepository.existsByEmail(userRequest.getEmail())) {
+        if (userRepository.existsByEmail(userRequestDto.getEmail())) {
             ApiResponse<User> accountExists = ApiResponse.error("409", "User with provided email already exists",
                     null);
             return new ResponseEntity<>(accountExists, HttpStatus.CONFLICT);
         }
-        User newUser = getNewUser(userRequest);
+        User newUser = getNewUser(userRequestDto);
         userRepository.save(newUser);
         otpService.generateOtp(newUser.getEmail());
 
@@ -74,12 +71,12 @@ public class UserServiceImpl implements UserService {
      * logins a user
      * check if a user detail is correct
      *
-     * @param loginRequest
+     * @param loginRequestDto
      * @return token as api response
      */
     @Override
-    public ResponseEntity<ApiResponse<Map<String, String>>> login(LoginRequest loginRequest) {
-        Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+    public ResponseEntity<ApiResponse<Map<String, String>>> login(LoginRequestDto loginRequestDto) {
+        Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(), loginRequestDto.getPassword()));
 
         if (!auth.isAuthenticated()) {
             ApiResponse<Map<String, String>> invalidLogin = ApiResponse.success("400", "Invalid Credentials", null);
@@ -107,7 +104,7 @@ public class UserServiceImpl implements UserService {
      * sends otp to user email
      */
     @Override
-    public ResponseEntity<ApiResponse<String>> forgotPassword(RegenerateOtp otpRequest) {
+    public ResponseEntity<ApiResponse<String>> forgotPassword(RegenerateOtpRequestDto otpRequest) {
         return otpService.regenerateOtp(otpRequest.getEmail());
     }
 
@@ -118,7 +115,7 @@ public class UserServiceImpl implements UserService {
      * validate otp validate user and change password;
      */
     @Override
-    public ResponseEntity<ApiResponse<String>> changePassword(ChangePasswordRequest changePasswordRequest) {
+    public ResponseEntity<ApiResponse<String>> changePassword(ChangePasswordRequestDto changePasswordRequest) {
         Otp otp = otpRepository.findByToken(changePasswordRequest.getOtp());
         User user = userRepository.findByUserEmail(changePasswordRequest.getEmail());
 
@@ -163,17 +160,17 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    private User getNewUser(UserRequest userRequest) {
+    private User getNewUser(UserRequestDto userRequestDto) {
         User newUser = new User();
-        newUser.setEmail(userRequest.getEmail());
+        newUser.setEmail(userRequestDto.getEmail());
         newUser.setRole(UserRole.USER);
-        newUser.setAddress(userRequest.getAddress());
+        newUser.setAddress(userRequestDto.getAddress());
         newUser.setStatus(AccountStatus.INACTIVE);
-        newUser.setFirstName(userRequest.getFirstName());
-        newUser.setLastName(userRequest.getLastName());
-        newUser.setOtherNames(userRequest.getOtherNames());
-        newUser.setPhoneNumber(userRequest.getPhoneNumber());
-        newUser.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+        newUser.setFirstName(userRequestDto.getFirstName());
+        newUser.setLastName(userRequestDto.getLastName());
+        newUser.setOtherNames(userRequestDto.getOtherNames());
+        newUser.setPhoneNumber(userRequestDto.getPhoneNumber());
+        newUser.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
         return newUser;
     }
 }

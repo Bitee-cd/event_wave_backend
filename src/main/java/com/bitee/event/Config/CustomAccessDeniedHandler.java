@@ -1,6 +1,6 @@
 package com.bitee.event.Config;
 
-import com.bitee.event.dao.ApiResponse;
+import com.bitee.event.utils.ApiResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

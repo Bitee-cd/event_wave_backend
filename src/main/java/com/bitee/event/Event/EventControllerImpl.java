@@ -1,6 +1,6 @@
 package com.bitee.event.Event;
 
-import com.bitee.event.dao.ApiResponse;
+import com.bitee.event.utils.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;

@@ -1,8 +1,7 @@
 package com.bitee.event.Event;
 
-import com.bitee.event.dao.ApiResponse;
+import com.bitee.event.utils.ApiResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.List;

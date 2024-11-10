@@ -1,5 +1,6 @@
 package com.bitee.event.User;
 
+import com.bitee.event.UserPrivilegeAssignment.UserPrivilegeAssignment;
 import com.bitee.event.Event.Event;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -43,4 +44,8 @@ public class User implements Serializable {
 
     @ManyToMany(mappedBy = "attendees")
     private List<Event> eventsAttended;
+
+    @OneToMany(mappedBy = "user")
+    private List<UserPrivilegeAssignment> privileges;
+
 }

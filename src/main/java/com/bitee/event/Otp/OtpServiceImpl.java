@@ -1,17 +1,15 @@
 package com.bitee.event.Otp;
 
-import com.bitee.event.Email.EmailDetails;
+import com.bitee.event.Email.EmailDetailsDto;
 import com.bitee.event.Email.EmailService;
 import com.bitee.event.User.AccountStatus;
 import com.bitee.event.User.User;
 import com.bitee.event.User.UserRepository;
-import com.bitee.event.dao.ApiResponse;
-import com.bitee.event.dao.OtpRequest;
+import com.bitee.event.utils.ApiResponse;
 import com.bitee.event.utils.EventUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -44,9 +42,9 @@ public class OtpServiceImpl implements OtpService {
 
 
     @Override
-    public ResponseEntity<ApiResponse<String>> verifyOtp(OtpRequest otpRequest) {
-        User user = userRepository.findByUserEmail(otpRequest.getEmail());
-        Otp supposedOtp = otpRepository.findByToken(otpRequest.getOtp());
+    public ResponseEntity<ApiResponse<String>> verifyOtp(OtpRequestDto otpRequestDto) {
+        User user = userRepository.findByUserEmail(otpRequestDto.getEmail());
+        Otp supposedOtp = otpRepository.findByToken(otpRequestDto.getOtp());
 
         if (user == null && supposedOtp == null || !supposedOtp.getUser().equals(user)) {
             return new ResponseEntity<>(ApiResponse.error("400", "Invalid details", null), HttpStatus.BAD_REQUEST);
@@ -104,12 +102,12 @@ public class OtpServiceImpl implements OtpService {
     }
 
     private void sendOtpEmail(User user, Otp otp) {
-        EmailDetails emailDetails = new EmailDetails();
-        emailDetails.setRecipient(user.getEmail());
-        emailDetails.setSubject("OTP Token for Event Wave Registration");
-        emailDetails.setMessageBody(EventUtils.EmailOtpBody(user.getFirstName(), otp.getToken()));
+        EmailDetailsDto emailDetailsDto = new EmailDetailsDto();
+        emailDetailsDto.setRecipient(user.getEmail());
+        emailDetailsDto.setSubject("OTP Token for Event Wave Registration");
+        emailDetailsDto.setMessageBody(EventUtils.EmailOtpBody(user.getFirstName(), otp.getToken()));
         System.out.println("i have gotten to send otp email line 72");
-        emailService.sendEmailAlert(emailDetails);
+        emailService.sendEmailAlert(emailDetailsDto);
 
     }
 }

@@ -1,6 +1,6 @@
 package com.bitee.event.Tag;
 
-import com.bitee.event.dao.ApiResponse;
+import com.bitee.event.utils.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,11 +30,11 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public ResponseEntity<ApiResponse<Tag>> createTag(CreateTagDto createTagDto) {
+    public ResponseEntity<ApiResponse<Tag>> createTag(CreateTagRequestDto createTagRequestDto) {
         try {
-            TagCategory category = TagCategory.valueOf(String.valueOf(createTagDto.getTagCategory()));
+            TagCategory category = TagCategory.valueOf(String.valueOf(createTagRequestDto.getTagCategory()));
             Tag tag = new Tag();
-            tag.setName(createTagDto.getName());
+            tag.setName(createTagRequestDto.getName());
             tag.setCategory(category);
             tagRepository.save(tag);
             return new ResponseEntity<>(ApiResponse.success("201", "Tag created successfully", tag), HttpStatus.CREATED);
@@ -45,7 +45,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public ResponseEntity<ApiResponse<Tag>> editTag(Long tagId, CreateTagDto editTagDto) {
+    public ResponseEntity<ApiResponse<Tag>> editTag(Long tagId, CreateTagRequestDto editTagDto) {
         try {
             Optional<Tag> optionalTag = tagRepository.findById(tagId);
 

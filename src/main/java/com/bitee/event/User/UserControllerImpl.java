@@ -1,12 +1,11 @@
 package com.bitee.event.User;
 
-import com.bitee.event.dao.*;
+import com.bitee.event.Otp.RegenerateOtpRequestDto;
+import com.bitee.event.utils.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -17,20 +16,20 @@ public class UserControllerImpl implements UserController{
 
 
     @Override
-    public ResponseEntity<ApiResponse<User>> signup(UserRequest userRequest) {
-        return userService.signup(userRequest);
+    public ResponseEntity<ApiResponse<User>> signup(UserRequestDto userRequestDto) {
+        return userService.signup(userRequestDto);
     }
 
     @Override
-    public ResponseEntity<ApiResponse<Map<String, String>>> login(LoginRequest loginRequest) {return userService.login(loginRequest);}
+    public ResponseEntity<ApiResponse<Map<String, String>>> login(LoginRequestDto loginRequestDto) {return userService.login(loginRequestDto);}
 
     @Override
-    public ResponseEntity<ApiResponse<String>> forgotPassword(RegenerateOtp otpRequest) {
+    public ResponseEntity<ApiResponse<String>> forgotPassword(RegenerateOtpRequestDto otpRequest) {
         return userService.forgotPassword(otpRequest);
     }
 
     @Override
-    public ResponseEntity<ApiResponse<String>> changePassword(ChangePasswordRequest changePasswordRequest) {
+    public ResponseEntity<ApiResponse<String>> changePassword(ChangePasswordRequestDto changePasswordRequest) {
         return userService.changePassword(changePasswordRequest);
     }
 

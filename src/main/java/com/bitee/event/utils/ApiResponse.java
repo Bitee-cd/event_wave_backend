@@ -1,4 +1,4 @@
-package com.bitee.event.dao;
+package com.bitee.event.utils;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

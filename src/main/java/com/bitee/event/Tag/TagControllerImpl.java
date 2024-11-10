@@ -1,6 +1,6 @@
 package com.bitee.event.Tag;
 
-import com.bitee.event.dao.ApiResponse;
+import com.bitee.event.utils.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,13 +19,13 @@ public class TagControllerImpl implements TagController {
     }
 
     @Override
-    public ResponseEntity<ApiResponse<Tag>> createTag(CreateTagDto createTagDto) {
-        return tagService.createTag(createTagDto);
+    public ResponseEntity<ApiResponse<Tag>> createTag(CreateTagRequestDto createTagRequestDto) {
+        return tagService.createTag(createTagRequestDto);
     }
 
     @Override
-    public ResponseEntity<ApiResponse<Tag>> editTag(Long tagId, CreateTagDto createTagDto) {
-        return tagService.editTag(tagId, createTagDto);
+    public ResponseEntity<ApiResponse<Tag>> editTag(Long tagId, CreateTagRequestDto createTagRequestDto) {
+        return tagService.editTag(tagId, createTagRequestDto);
     }
 
     @Override
