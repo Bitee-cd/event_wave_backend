@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -76,6 +77,10 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public ResponseEntity<ApiResponse<Map<String, String>>> login(LoginRequestDto loginRequestDto) {
+        User maybeUser = userRepository.findByUserEmail(loginRequestDto.getEmail());
+        if (maybeUser == null) {
+            return new ResponseEntity<>(ApiResponse.error("400", "Invalid Credentials", null), HttpStatus.BAD_REQUEST);
+        }
         Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(), loginRequestDto.getPassword()));
 
         if (!auth.isAuthenticated()) {
@@ -94,6 +99,7 @@ public class UserServiceImpl implements UserService {
         responseData.put("token", token);
         ApiResponse<Map<String, String>> userToken = ApiResponse.success("400", "Sucess", responseData);
         return new ResponseEntity<>(userToken, HttpStatus.OK);
+
     }
 
     /**
@@ -140,7 +146,6 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     *
      * @return list of enum types
      */
     @Override

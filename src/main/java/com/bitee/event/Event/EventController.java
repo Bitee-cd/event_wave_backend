@@ -11,17 +11,20 @@ import java.util.Map;
 
 @RequestMapping("/event")
 public interface EventController {
-    @PostMapping("create")
-    ResponseEntity<ApiResponse<String>> createEvent();
+    @PostMapping("")
+    ResponseEntity<ApiResponse<Event>> createEvent(@Valid @RequestBody CreateEventRequestDto createEventRequestDto);
 
-    @PutMapping("edit")
-    ResponseEntity<ApiResponse<String>> editEvent();
+    @PutMapping("{eventId}")
+    ResponseEntity<ApiResponse<Event>> editEvent(@PathVariable("eventId") Long eventId ,@Valid @RequestBody CreateEventRequestDto editEventRequestDto );
 
     @GetMapping("")
-    ResponseEntity<ApiResponse<ArrayList<Event>>> getAllEvents();
+    ResponseEntity<ApiResponse<List<Event>>> getAllEvents();
 
-    @GetMapping("/{eventId}")
-    ResponseEntity<ApiResponse<Event>> getSingleEvent(@Valid @PathVariable Long eventId);
+    @GetMapping("{eventId}")
+    ResponseEntity<ApiResponse<Event>> getSingleEvent(@Valid @PathVariable("eventId") Long eventId);
+
+    @DeleteMapping("{eventId}")
+    ResponseEntity<ApiResponse<String>> deleteSingleEvent(@Valid @PathVariable("eventId") Long eventId);
 
     @GetMapping("types")
     ResponseEntity<ApiResponse<List<Map<String,String>>>> getEventTypes();

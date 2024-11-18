@@ -13,18 +13,19 @@ import java.util.Map;
 public class EventControllerImpl implements EventController{
     @Autowired
     EventService eventService;
+
     @Override
-    public ResponseEntity<ApiResponse<String>> createEvent() {
-        return null;
+    public ResponseEntity<ApiResponse<Event>> createEvent(CreateEventRequestDto createEventRequestDto) {
+        return eventService.createEvent(createEventRequestDto);
     }
 
     @Override
-    public ResponseEntity<ApiResponse<String>> editEvent() {
-        return null;
+    public ResponseEntity<ApiResponse<Event>> editEvent(Long eventId, CreateEventRequestDto editEventRequestDto) {
+        return eventService.editEvent(eventId,editEventRequestDto);
     }
 
     @Override
-    public ResponseEntity<ApiResponse<ArrayList<Event>>> getAllEvents() {
+    public ResponseEntity<ApiResponse<List<Event>>> getAllEvents() {
 
       return  eventService.getAllEvents();
     }
@@ -32,6 +33,11 @@ public class EventControllerImpl implements EventController{
     @Override
     public ResponseEntity<ApiResponse<Event>> getSingleEvent(Long eventId) {
         return eventService.getSingleEvent(eventId);
+    }
+
+    @Override
+    public ResponseEntity<ApiResponse<String>> deleteSingleEvent(Long eventId) {
+        return null;
     }
 
     @Override

@@ -3,19 +3,18 @@ package com.bitee.event.Event;
 import com.bitee.event.utils.ApiResponse;
 import org.springframework.http.ResponseEntity;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public interface EventService {
 
-    ResponseEntity<ApiResponse<String>> createEvent();
+    ResponseEntity<ApiResponse<Event>> createEvent(CreateEventRequestDto createEventRequestDto);
 
 
-    ResponseEntity<ApiResponse<String>> editEvent();
+    ResponseEntity<ApiResponse<Event>> editEvent(Long eventId, CreateEventRequestDto editEventRequestDto);
 
 
-    ResponseEntity<ApiResponse<ArrayList<Event>>> getAllEvents();
+    ResponseEntity<ApiResponse<List<Event>>> getAllEvents();
 
 
     ResponseEntity<ApiResponse<Event>> getSingleEvent(Long eventId);

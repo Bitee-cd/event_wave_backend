@@ -37,19 +37,19 @@ public class Event implements Serializable {
     @Column(name="location")
     private String location;
 
-    @Column(name="address")
+    @Column(name="address",nullable = true)
     private String address;
 
-    @Column(name="meeting_link")
+    @Column(name="meeting_link",nullable = true)
     private String meetingLink;
 
-    @Column(name="image")
+    @Column(name="image",nullable = true)
     private String image;
 
     @Column(name="description")
     private String description;
 
-    @Column(name="price")
+    @Column(name="price",nullable = true)
     private BigDecimal price;
 
     @Column (name="created_at")

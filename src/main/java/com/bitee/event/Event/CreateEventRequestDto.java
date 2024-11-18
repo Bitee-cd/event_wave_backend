@@ -3,6 +3,7 @@ package com.bitee.event.Event;
 import com.bitee.event.Tag.Tag;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Column;
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -36,7 +37,7 @@ public class CreateEventRequestDto {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "price")
+    @Digits(integer = 10, fraction = 2, message = "Price must be a numeric value with up to 10 digits and 2 decimal places")
     private BigDecimal price;
 
 

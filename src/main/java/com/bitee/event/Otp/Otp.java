@@ -35,7 +35,7 @@ public class Otp implements Serializable {
     private Date expiresAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="user",nullable = false)
+    @JoinColumn(name="user_id",nullable = false)
     private User user;
 
 }
