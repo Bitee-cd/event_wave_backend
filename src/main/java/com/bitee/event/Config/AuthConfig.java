@@ -47,7 +47,7 @@ public class AuthConfig {
                 .authenticationProvider(daoAuthenticationProvider())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.POST, "/auth/login", "/auth/signup", "/otp/verify","/otp/regenerate").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/login", "/auth/signup", "/otp/verify","/otp/regenerate","/auth/password/forgot","/auth/password/change").permitAll()
                         .anyRequest().authenticated()
 
                 ).addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
