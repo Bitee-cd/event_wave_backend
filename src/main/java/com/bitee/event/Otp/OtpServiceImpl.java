@@ -85,13 +85,16 @@ public class OtpServiceImpl implements OtpService {
     }
 
 
-    private void invalidateExistingOtp(User user){
+    @Override
+    public void invalidateExistingOtp(User user){
         Otp existingOtp = otpRepository.findByUserEmail(user.getEmail());
         if (existingOtp != null) {
             otpRepository.delete(existingOtp);
         }
     }
-    private Otp createAndSaveOtp(User user) {
+
+    @Override
+    public Otp createAndSaveOtp(User user) {
         Otp otp = new Otp();
         otp.setCreatedAt(new Date());
         otp.setUser(user);
@@ -101,7 +104,8 @@ public class OtpServiceImpl implements OtpService {
         return otp;
     }
 
-    private void sendOtpEmail(User user, Otp otp) {
+    @Override
+    public void sendOtpEmail(User user, Otp otp) {
         EmailDetailsDto emailDetailsDto = new EmailDetailsDto();
         emailDetailsDto.setRecipient(user.getEmail());
         emailDetailsDto.setSubject("OTP Token for Event Wave Registration");

@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -97,7 +96,7 @@ public class UserServiceImpl implements UserService {
         String token = jwtUtil.generateToken(userDetails.getEmail(), userDetails.getRole().name());
         Map<String, String> responseData = new HashMap<>();
         responseData.put("token", token);
-        ApiResponse<Map<String, String>> userToken = ApiResponse.success("400", "Sucess", responseData);
+        ApiResponse<Map<String, String>> userToken = ApiResponse.success("400", "Success", responseData);
         return new ResponseEntity<>(userToken, HttpStatus.OK);
 
     }
@@ -111,7 +110,18 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public ResponseEntity<ApiResponse<String>> forgotPassword(RegenerateOtpRequestDto otpRequest) {
-        return otpService.regenerateOtp(otpRequest.getEmail());
+        User user = userRepository.findByUserEmail(otpRequest.getEmail());
+        if (user== null){
+            return new ResponseEntity<>(ApiResponse.success("200","Otp sent successfully to email",null),HttpStatus.OK);
+        }
+
+        if( !user.getStatus().equals(AccountStatus.INACTIVE)){
+            return new ResponseEntity<>(ApiResponse.error("400", "User has been activated", null), HttpStatus.BAD_REQUEST);
+        }
+        otpService.invalidateExistingOtp(user);
+        Otp otp = otpService.createAndSaveOtp(user);
+        otpService.sendOtpEmail(user, otp);
+        return new ResponseEntity<>(ApiResponse.success("200", "Otp sent successfully to email", null), HttpStatus.OK);
     }
 
     /**
