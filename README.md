@@ -1,6 +1,6 @@
 # Event Wave Bavkend
 
-This is a Spring Boot application that serves as a backend service for [describe the purpose of your application, e.g., managing user accounts, processing orders, etc.].
+This is a Spring Boot application that serves as the backend service for **Event Wave**, providing essential functionality such as managing user accounts, handling events, and more. It is designed to ensure a robust and scalable platform for seamless event management and user interaction.
 
 ## Features
 - [ Creating and Joining of Events]
