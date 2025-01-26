@@ -68,8 +68,51 @@ ma
    ```
 ### Access the Appilcation
 The application should now be running at http://localhost:8080.
+## Testing
 
+### Running Tests
+This project includes unit and integration tests to ensure code quality and functionality.
 
+1. **Run Tests with Maven**  
+   Execute the following command to run all tests:
+   ```bash
+   mvn test
+   ```
+## Deployment
+### On Local Machine
+Run the application locally using the steps mentioned above.
+### On Cloud
+1. **Package the application as a JAR file using Maven**
+```bash
+   mvn clean package
+```
+2. **Deploy the JAR to your cloud environment or container service**
+### Docker Deployment
+
+1. **Create a Dockerfile**  
+   Add a `Dockerfile` to the project to containerize the application.
+   ```dockerfile
+   FROM openjdk:17-jdk-slim
+   ARG JAR_FILE=target/event-wave-backend-0.0.1-SNAPSHOT.jar
+   COPY ${JAR_FILE} app.jar
+   ENTRYPOINT ["java", "-jar", "app.jar"]
+2. **Build and Run the DockerImage**  
+   Build the Docker image from the application:
+   ```dockerfile
+   docker build -t event-wave-backend .
+   docker run -p 8080:8080 event-wave-backend
+ 
+   
+
+## Technologies Used
+1. **Java 17: The core programming language.**
+2. **Spring Boot: Framework for building the application.**
+3. **Hibernate: ORM for database operations.**
+4. **MySQL/PostgreSQL: Relational databases for data storage.**
+5. **JWT: Secure token-based authentication.**
+6. **Maven: Build and dependency management tool.**
+7. **JUnit: Testing framework for unit and integration tests.**
+8. **Docker: For containerization and deployment.**
 
 
 
