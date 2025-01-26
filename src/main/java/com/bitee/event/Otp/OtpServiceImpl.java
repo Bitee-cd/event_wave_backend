@@ -46,7 +46,7 @@ public class OtpServiceImpl implements OtpService {
         User user = userRepository.findByUserEmail(otpRequestDto.getEmail());
         Otp supposedOtp = otpRepository.findByToken(otpRequestDto.getOtp());
 
-        if (user == null && supposedOtp == null || !supposedOtp.getUser().equals(user)) {
+        if (user == null || supposedOtp == null || !supposedOtp.getUser().equals(user)) {
             return new ResponseEntity<>(ApiResponse.error("400", "Invalid details", null), HttpStatus.BAD_REQUEST);
         }
         if (supposedOtp.getExpiresAt().before(new Date())) {
@@ -79,8 +79,6 @@ public class OtpServiceImpl implements OtpService {
         Otp otp = createAndSaveOtp(user);
         sendOtpEmail(user, otp);
         return new ResponseEntity<>(ApiResponse.success("200", "Otp sent successfully to email", null), HttpStatus.OK);
-
-
 
     }
 

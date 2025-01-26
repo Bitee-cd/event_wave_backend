@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.bitee.event.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
@@ -51,12 +52,7 @@ public class UserServiceTest {
 
     @InjectMocks
     private UserServiceImpl userService;
-    private static final String TEST_FIRST_NAME = "Test_First_Name";
-    private static final String TEST_LAST_NAME = "Test_Last_Name";
-    private static final String TEST_EMAIL="test@example.com";
-    private static final String TEST_PASSWORD="TestPassword?";
-    private static final String TEST_PHONE_NUMBER = "07000000000";
-    private static final String TEST_OTP="000000";
+
 
     private UserRequestDto userRequestDto;
     private LoginRequestDto loginRequestDto;
