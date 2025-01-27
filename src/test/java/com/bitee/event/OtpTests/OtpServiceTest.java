@@ -37,8 +37,7 @@ public class OtpServiceTest {
 
     @InjectMocks
     private OtpServiceImpl otpService;
-
-    private UserRequestDto userRequestDto;
+    UserRequestDto userRequestDto;
 
     @BeforeEach
     void setup(){

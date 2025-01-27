@@ -34,8 +34,17 @@ public class Otp implements Serializable {
     @Column(name="expires_at")
     private Date expiresAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="user_id",nullable = false)
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name="user_id",nullable = false)
+//    private User user;
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = new Date();
+        this.expiresAt = new Date(System.currentTimeMillis() + 15 * 60 * 1000);
+    }
 
 }

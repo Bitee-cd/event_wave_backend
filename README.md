@@ -34,7 +34,7 @@ cd event_wave_backend
    Edit the database connection configuration in the  `application.properties` file. Below is an example configuration:
 ma
    ```properties
-   spring.datasource.url=jdbc:mysql://localhost:3306/spring_boot_app
+   spring.datasource.url=jdbc:mysql://localhost:3306/event_wave_db
    spring.datasource.username=your-username
    spring.datasource.password=your-password
    spring.jpa.hibernate.ddl-auto=update

@@ -26,7 +26,7 @@ public class TagServiceImpl implements TagService {
                         Tag::getCategory,
                         Collectors.collectingAndThen(Collectors.toList(), ArrayList::new)
                 ));
-        return new ResponseEntity<>(ApiResponse.success("200", "Tags retrieved successfully ", categorizedTags), HttpStatus.OK);
+        return new ResponseEntity<>(ApiResponse.success("200", "Tags retrieved successfully", categorizedTags), HttpStatus.OK);
     }
 
     @Override

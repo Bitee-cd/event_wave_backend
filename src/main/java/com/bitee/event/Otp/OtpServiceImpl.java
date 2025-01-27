@@ -96,7 +96,7 @@ public class OtpServiceImpl implements OtpService {
         Otp otp = new Otp();
         otp.setCreatedAt(new Date());
         otp.setUser(user);
-        otp.setExpiresAt(new Date(System.currentTimeMillis() + 15 * 60 * 1000));  // OTP expires in 15 minutes
+//        otp.setExpiresAt(new Date(System.currentTimeMillis() + 15 * 60 * 1000));  // OTP expires in 15 minutes
         otp.setToken(EventUtils.generateRandomToken());
         otpRepository.save(otp);
         return otp;
