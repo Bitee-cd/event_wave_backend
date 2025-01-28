@@ -1,6 +1,7 @@
 package com.bitee.event.Event;
 
 import com.bitee.event.utils.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 @RequestMapping("/event")
+@Tag(name="Event Management APIs")
 public interface EventController {
     @PostMapping("")
     ResponseEntity<ApiResponse<Event>> createEvent(@Valid @RequestBody CreateEventRequestDto createEventRequestDto);

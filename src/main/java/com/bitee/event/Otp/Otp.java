@@ -37,7 +37,7 @@ public class Otp implements Serializable {
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name="user_id",nullable = false)
 //    private User user;
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 

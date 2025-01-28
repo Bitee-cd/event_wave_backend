@@ -8,6 +8,10 @@ import com.bitee.event.Otp.OtpRepository;
 import com.bitee.event.Otp.OtpService;
 import com.bitee.event.Otp.RegenerateOtpRequestDto;
 import com.bitee.event.utils.ApiResponse;
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
+import jakarta.annotation.Resource;
+import jakarta.mail.Multipart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +20,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -41,6 +47,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     OtpRepository otpRepository;
+
+
+    @Resource
+    private Cloudinary cloudinary;
+
+
 
     /**
      * create a user
@@ -172,6 +184,26 @@ public class UserServiceImpl implements UserService {
 
         optionsData.put("eventType", eventOptions);
         return new ResponseEntity<>(ApiResponse.success("200", "success", optionsData), HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<ApiResponse<Map<String, String>>> uploadImage(MultipartFile file) {
+        try {
+            HashMap<Object, Object> options = new HashMap<>();
+            options.put("folder", "event_wave");
+            Map<String, String> uploadResult = cloudinary.uploader().upload(file.getBytes(), options);
+            System.out.println(uploadResult);
+            String imageUrl = uploadResult.get("url");
+            Map<String, String> responseMap = new HashMap<>();
+            responseMap.put("url", imageUrl);
+
+            ApiResponse<Map<String, String>> apiResponse = ApiResponse.success("201", "Image uploaded successfully", responseMap);
+
+            return ResponseEntity.ok(apiResponse);
+        } catch (IOException e) {
+            ApiResponse<Map<String, String>> apiResponse =  ApiResponse.error("400", "Error uploading image", null);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(apiResponse);
+        }
     }
 
 

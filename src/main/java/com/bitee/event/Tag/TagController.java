@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 @RequestMapping("tags")
+@io.swagger.v3.oas.annotations.tags.Tag(name="Tag Management APIs")
 public interface TagController {
 
     @GetMapping("")

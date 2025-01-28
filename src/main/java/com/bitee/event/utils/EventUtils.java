@@ -1,5 +1,7 @@
 package com.bitee.event.utils;
 
+import java.time.Year;
+
 public class EventUtils {
     public static String generateRandomToken(){
         int randomPin = (int) Math.floor(Math.random() * 900000) + 100000; // Generate a 6-digit random number
@@ -7,6 +9,7 @@ public class EventUtils {
     }
 
     public static String EmailOtpBody(String username, String otp){
+        int currentYear = Year.now().getValue();
         return "<!DOCTYPE html>\n" +
                 "<html lang=\"en\">\n" +
                 "<head>\n" +
@@ -81,7 +84,7 @@ public class EventUtils {
                 "            <p>If you did not request this email, please ignore it.</p>\n" +
                 "        </div>\n" +
                 "        <div class=\"footer\">\n" +
-                "            <p>&copy; 2024 Your Company. All rights reserved.</p>\n" +
+                "            <p>&copy; " + currentYear + " Your Company. All rights reserved.</p>\n" +
                 "        </div>\n" +
                 "    </div>\n" +
                 "</body>\n" +

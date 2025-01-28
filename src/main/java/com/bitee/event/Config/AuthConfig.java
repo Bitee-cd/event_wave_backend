@@ -48,6 +48,7 @@ public class AuthConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/auth/login", "/auth/signup", "/otp/verify","/otp/regenerate","/auth/password/forgot","/auth/password/change").permitAll()
+                        .requestMatchers("/hello","/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
                         .anyRequest().authenticated()
 
                 ).addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

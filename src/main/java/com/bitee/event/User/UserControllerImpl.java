@@ -2,9 +2,11 @@ package com.bitee.event.User;
 
 import com.bitee.event.Otp.RegenerateOtpRequestDto;
 import com.bitee.event.utils.ApiResponse;
+import jakarta.mail.Multipart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -36,5 +38,10 @@ public class UserControllerImpl implements UserController{
     @Override
     public ResponseEntity<ApiResponse<Map<String, List<Map<String,String>>>>> options() {
         return userService.options();
+    }
+
+    @Override
+    public ResponseEntity<ApiResponse<Map<String, String>>> uploadImage(MultipartFile file) {
+        return userService.uploadImage(file);
     }
 }

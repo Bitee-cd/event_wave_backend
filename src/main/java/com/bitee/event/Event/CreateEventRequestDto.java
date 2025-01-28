@@ -6,6 +6,7 @@ import jakarta.persistence.Column;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,7 +32,10 @@ public class CreateEventRequestDto {
 
     private String meetingLink;
 
-
+    @Pattern(
+            regexp = "^(https://.*)?$",
+            message = "Image URL must start with 'https://' if provided"
+    )
     private String image;
 
     @Column(name = "description")

@@ -108,7 +108,6 @@ public class OtpServiceImpl implements OtpService {
         emailDetailsDto.setRecipient(user.getEmail());
         emailDetailsDto.setSubject("OTP Token for Event Wave Registration");
         emailDetailsDto.setMessageBody(EventUtils.EmailOtpBody(user.getFirstName(), otp.getToken()));
-        System.out.println("i have gotten to send otp email line 72");
         emailService.sendEmailAlert(emailDetailsDto);
 
     }
